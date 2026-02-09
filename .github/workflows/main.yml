@@ -24,15 +24,27 @@ jobs:
       - name: Build frontend
         run: npm run build
 
-      - name: Upload build to VPS
+      # Remove old dist folder first to avoid nested dist/dist
+      - name: Clean old dist on server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_IP }}
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            rm -rf /var/www/majesticmarriages/majesticmarriages_frontend/dist
+
+      # Upload fresh dist folder
+      - name: Upload new dist to VPS
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.VPS_IP }}
           username: root
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
-          source: "dist/*"
-          target: "/var/www/majesticmarriages/majesticmarriages_frontend/dist"
+          source: "dist"
+          target: "/var/www/majesticmarriages/majesticmarriages_frontend"
 
       - name: Reload Nginx
         uses: appleboy/ssh-action@v1.0.3
