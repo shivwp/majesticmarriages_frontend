@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { motion } from "motion/react";
-import { MapPin, Phone, Mail, Clock, MessageCircle, Send } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, MessageCircle, Send, Loader2 } from "lucide-react";
 import { Button } from "../components/Button";
+import { contactService } from "../services/contact.service";
+import { toast } from "sonner";
 
 export function Contact() {
   const [formData, setFormData] = useState({
@@ -12,16 +14,25 @@ export function Contact() {
     message: ""
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData({ ...formData, [field]: value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitted(true);
-    // In a real app, this would send data to backend
-    console.log("Contact form submitted:", formData);
+    setIsLoading(true);
+
+    try {
+      await contactService.submitContact(formData);
+      setIsSubmitted(true);
+      toast.success("Message sent successfully!");
+    } catch (error: any) {
+      toast.error(error.message || "Failed to send message. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleWhatsApp = () => {
@@ -66,11 +77,11 @@ export function Contact() {
           <div className="w-20 h-20 bg-gradient-to-br from-[var(--maroon)] to-[var(--royal-blue)] rounded-full flex items-center justify-center mx-auto mb-6">
             <Send className="text-[var(--gold)]" size={40} />
           </div>
-          
+
           <h1 className="text-4xl mb-4 text-[var(--maroon)]" style={{ fontFamily: 'var(--font-serif)' }}>
             Message Sent!
           </h1>
-          
+
           <p className="text-xl text-gray-600 mb-8" style={{ fontFamily: 'var(--font-sans)' }}>
             Thank you for reaching out! We'll get back to you within 24 hours.
           </p>
@@ -235,15 +246,25 @@ export function Contact() {
                     onChange={(e) => handleInputChange("message", e.target.value)}
                     placeholder="Tell us more about your event..."
                     rows={6}
+                    minLength={10}
                     className="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-[var(--maroon)] focus:outline-none resize-none"
                     style={{ fontFamily: 'var(--font-sans)' }}
                     required
                   />
                 </div>
 
-                <Button type="submit" variant="primary" size="lg" className="w-full">
-                  Send Message
-                  <Send size={20} className="ml-2" />
+                <Button type="submit" variant="primary" size="lg" className="w-full" disabled={isLoading}>
+                  {isLoading ? (
+                    <>
+                      Sending...
+                      <Loader2 size={20} className="ml-2 animate-spin" />
+                    </>
+                  ) : (
+                    <>
+                      Send Message
+                      <Send size={20} className="ml-2" />
+                    </>
+                  )}
                 </Button>
               </form>
             </motion.div>

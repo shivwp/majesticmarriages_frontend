@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { motion } from "motion/react";
-import { Check, ChevronRight, Calendar, Users, MapPin, DollarSign, MessageCircle, Phone } from "lucide-react";
+import { Check, ChevronRight, Calendar, Users, MapPin, DollarSign, MessageCircle, Phone, Loader2 } from "lucide-react";
 import { Button } from "../components/Button";
+import { bookingService } from "../services/booking.service";
+import { toast } from "sonner";
 
 type Step = 1 | 2 | 3 | 4;
 
@@ -19,6 +21,7 @@ export function Booking() {
     message: ""
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const steps = [
     { number: 1, title: "Event Details", icon: Calendar },
@@ -57,9 +60,24 @@ export function Booking() {
     setFormData({ ...formData, [field]: value });
   };
 
+  const isStepValid = () => {
+    switch (currentStep) {
+      case 1:
+        return formData.eventType && formData.eventDate && formData.location;
+      case 2:
+        return formData.guestCount && formData.budgetRange;
+      case 3:
+        return formData.name && formData.email && formData.phone;
+      default:
+        return true;
+    }
+  };
+
   const handleNext = () => {
-    if (currentStep < 4) {
+    if (isStepValid() && currentStep < 4) {
       setCurrentStep((currentStep + 1) as Step);
+    } else if (!isStepValid()) {
+      toast.error("Please fill in all required fields");
     }
   };
 
@@ -69,10 +87,17 @@ export function Booking() {
     }
   };
 
-  const handleSubmit = () => {
-    setIsSubmitted(true);
-    // In a real app, this would send data to backend
-    console.log("Form submitted:", formData);
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    try {
+      await bookingService.submitBooking(formData);
+      setIsSubmitted(true);
+      toast.success("Enquiry submitted successfully!");
+    } catch (error: any) {
+      toast.error(error.message || "Failed to submit enquiry. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleWhatsApp = () => {
@@ -93,11 +118,11 @@ export function Booking() {
           <div className="w-20 h-20 bg-gradient-to-br from-[var(--maroon)] to-[var(--royal-blue)] rounded-full flex items-center justify-center mx-auto mb-6">
             <Check className="text-[var(--gold)]" size={40} />
           </div>
-          
+
           <h1 className="text-4xl mb-4 text-[var(--maroon)]" style={{ fontFamily: 'var(--font-serif)' }}>
             Thank You!
           </h1>
-          
+
           <p className="text-xl text-gray-600 mb-8" style={{ fontFamily: 'var(--font-sans)' }}>
             Your enquiry has been submitted successfully. Our team will contact you within 24 hours to discuss your event details.
           </p>
@@ -150,7 +175,7 @@ export function Booking() {
           <div className="flex justify-between items-center relative">
             {/* Progress Line */}
             <div className="absolute top-6 left-0 right-0 h-1 bg-gray-200 -z-10">
-              <div 
+              <div
                 className="h-full bg-gradient-to-r from-[var(--maroon)] to-[var(--royal-blue)] transition-all duration-500"
                 style={{ width: `${((currentStep - 1) / 3) * 100}%` }}
               ></div>
@@ -160,22 +185,20 @@ export function Booking() {
               const Icon = step.icon;
               const isCompleted = step.number < currentStep;
               const isCurrent = step.number === currentStep;
-              
+
               return (
                 <div key={step.number} className="flex flex-col items-center">
                   <div
-                    className={`w-12 h-12 rounded-full flex items-center justify-center mb-2 transition-all ${
-                      isCompleted || isCurrent
-                        ? "bg-gradient-to-br from-[var(--maroon)] to-[var(--royal-blue)] text-white"
-                        : "bg-white border-2 border-gray-300 text-gray-400"
-                    }`}
+                    className={`w-12 h-12 rounded-full flex items-center justify-center mb-2 transition-all ${isCompleted || isCurrent
+                      ? "bg-gradient-to-br from-[var(--maroon)] to-[var(--royal-blue)] text-white"
+                      : "bg-white border-2 border-gray-300 text-gray-400"
+                      }`}
                   >
                     {isCompleted ? <Check size={24} /> : <Icon size={24} />}
                   </div>
                   <span
-                    className={`text-sm text-center hidden sm:block ${
-                      isCompleted || isCurrent ? "text-[var(--maroon)]" : "text-gray-400"
-                    }`}
+                    className={`text-sm text-center hidden sm:block ${isCompleted || isCurrent ? "text-[var(--maroon)]" : "text-gray-400"
+                      }`}
                     style={{ fontFamily: 'var(--font-sans)' }}
                   >
                     {step.title}
@@ -214,11 +237,10 @@ export function Booking() {
                       <button
                         key={type}
                         onClick={() => handleInputChange("eventType", type)}
-                        className={`p-4 rounded-xl border-2 transition-all ${
-                          formData.eventType === type
-                            ? "border-[var(--maroon)] bg-[var(--maroon)]/5 text-[var(--maroon)]"
-                            : "border-gray-200 hover:border-[var(--maroon)]/50"
-                        }`}
+                        className={`p-4 rounded-xl border-2 transition-all ${formData.eventType === type
+                          ? "border-[var(--maroon)] bg-[var(--maroon)]/5 text-[var(--maroon)]"
+                          : "border-gray-200 hover:border-[var(--maroon)]/50"
+                          }`}
                         style={{ fontFamily: 'var(--font-sans)' }}
                       >
                         {type}
@@ -277,11 +299,10 @@ export function Booking() {
                       <button
                         key={range}
                         onClick={() => handleInputChange("guestCount", range)}
-                        className={`p-4 rounded-xl border-2 transition-all ${
-                          formData.guestCount === range
-                            ? "border-[var(--maroon)] bg-[var(--maroon)]/5 text-[var(--maroon)]"
-                            : "border-gray-200 hover:border-[var(--maroon)]/50"
-                        }`}
+                        className={`p-4 rounded-xl border-2 transition-all ${formData.guestCount === range
+                          ? "border-[var(--maroon)] bg-[var(--maroon)]/5 text-[var(--maroon)]"
+                          : "border-gray-200 hover:border-[var(--maroon)]/50"
+                          }`}
                         style={{ fontFamily: 'var(--font-sans)' }}
                       >
                         {range}
@@ -299,11 +320,10 @@ export function Booking() {
                       <button
                         key={range}
                         onClick={() => handleInputChange("budgetRange", range)}
-                        className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
-                          formData.budgetRange === range
-                            ? "border-[var(--maroon)] bg-[var(--maroon)]/5 text-[var(--maroon)]"
-                            : "border-gray-200 hover:border-[var(--maroon)]/50"
-                        }`}
+                        className={`w-full p-4 rounded-xl border-2 transition-all text-left ${formData.budgetRange === range
+                          ? "border-[var(--maroon)] bg-[var(--maroon)]/5 text-[var(--maroon)]"
+                          : "border-gray-200 hover:border-[var(--maroon)]/50"
+                          }`}
                         style={{ fontFamily: 'var(--font-sans)' }}
                       >
                         {range}
@@ -380,6 +400,7 @@ export function Booking() {
                     onChange={(e) => handleInputChange("message", e.target.value)}
                     placeholder="Tell us more about your vision..."
                     rows={4}
+                    minLength={10}
                     className="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-[var(--maroon)] focus:outline-none resize-none"
                     style={{ fontFamily: 'var(--font-sans)' }}
                   />
@@ -468,23 +489,32 @@ export function Booking() {
                 Back
               </Button>
             )}
-            
+
             {currentStep < 4 ? (
-              <Button 
-                variant="primary" 
+              <Button
+                variant="primary"
                 onClick={handleNext}
                 className="ml-auto"
+                disabled={!isStepValid()}
               >
                 Continue
                 <ChevronRight size={20} className="ml-2" />
               </Button>
             ) : (
-              <Button 
-                variant="primary" 
+              <Button
+                variant="primary"
                 onClick={handleSubmit}
                 className="ml-auto"
+                disabled={isLoading}
               >
-                Submit Enquiry
+                {isLoading ? (
+                  <>
+                    Submitting...
+                    <Loader2 size={20} className="ml-2 animate-spin" />
+                  </>
+                ) : (
+                  "Submit Enquiry"
+                )}
               </Button>
             )}
           </div>
