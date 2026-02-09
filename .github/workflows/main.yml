@@ -46,18 +46,7 @@ jobs:
           source: "dist"
           target: "/var/www/majesticmarriages/majesticmarriages_frontend"
 
-      # Upload fresh API folder
-      - name: Upload new API to VPS
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.VPS_IP }}
-          username: root
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
-          source: "api"
-          target: "/var/www/majesticmarriages/majesticmarriages_frontend"
-
-      - name: Deploy & Restart Services
+      - name: Reload Nginx
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_IP }}
@@ -65,17 +54,4 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            # Install backend dependencies
-            cd /var/www/majesticmarriages/majesticmarriages_frontend/api
-            npm install --production
-            
-            # Restart backend server (using pm2 if available, fallback to node)
-            if command -v pm2 > /dev/null; then
-              pm2 restart majestic-api || pm2 start server.js --name "majestic-api"
-            else
-              pkill -f "node server.js" || true
-              nohup node server.js > output.log 2>&1 &
-            fi
-            
-            # Reload Nginx
             sudo systemctl reload nginx
