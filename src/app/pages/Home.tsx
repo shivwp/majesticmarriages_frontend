@@ -87,11 +87,11 @@ export function Home() {
       {/* Hero Section */}
       <section className="relative h-[600px] md:h-[700px] bg-gradient-to-br from-[var(--maroon)] via-[var(--royal-blue)] to-[var(--maroon)] overflow-hidden">
         <div className="absolute inset-0 bg-black/30"></div>
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center mix-blend-overlay opacity-40"
           style={{ backgroundImage: `url('https://images.unsplash.com/photo-1712314947761-a8d718bd8c32?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjB3ZWRkaW5nJTIwcmVjZXB0aW9uJTIwdmVudWV8ZW58MXx8fHwxNzcwMjg5OTc4fDA&ixlib=rb-4.1.0&q=80&w=1080')` }}
         ></div>
-        
+
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -107,16 +107,16 @@ export function Home() {
             >
               <span className="text-[var(--gold)]" style={{ fontFamily: 'var(--font-sans)' }}>✨ Premium Event Management</span>
             </motion.div>
-            
+
             <h1 className="text-4xl md:text-6xl lg:text-7xl mb-6 leading-tight" style={{ fontFamily: 'var(--font-serif)' }}>
-              We Plan Your Dream{" "}
+              We Plan Your Dreamssss{" "}
               <span className="text-[var(--gold)]">Wedding</span> & Events
             </h1>
-            
+
             <p className="text-xl md:text-2xl mb-8 text-white/90" style={{ fontFamily: 'var(--font-sans)' }}>
               Creating unforgettable moments with elegance, precision, and passion. From intimate gatherings to grand celebrations.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to="/booking">
                 <Button variant="gold" size="lg">
@@ -168,8 +168,8 @@ export function Home() {
                   className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all"
                 >
                   <div className="h-48 overflow-hidden">
-                    <img 
-                      src={service.image} 
+                    <img
+                      src={service.image}
                       alt={service.title}
                       className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
                     />
@@ -268,8 +268,8 @@ export function Home() {
                 whileHover={{ scale: 1.05 }}
                 className="relative h-64 rounded-2xl overflow-hidden shadow-lg cursor-pointer group"
               >
-                <img 
-                  src={image} 
+                <img
+                  src={image}
                   alt={`Event ${index + 1}`}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
