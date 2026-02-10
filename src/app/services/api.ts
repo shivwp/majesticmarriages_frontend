@@ -1,5 +1,8 @@
-const API_URL = import.meta.env.VITE_API_URL ||
-  (import.meta.env.PROD ? 'https://api.majesticmarriages.com/api' : 'http://localhost:5000/api');
+/// <reference types="vite/client" />
+const BASE_URL = import.meta.env.VITE_API_URL ||
+  (import.meta.env.PROD ? 'https://api.majesticmarriages.com' : 'http://localhost:5000');
+
+const API_URL = BASE_URL.endsWith('/api') ? BASE_URL : `${BASE_URL.replace(/\/$/, '')}/api`;
 
 export async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const response = await fetch(`${API_URL}${endpoint}`, {
