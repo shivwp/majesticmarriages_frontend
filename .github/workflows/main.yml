@@ -24,7 +24,7 @@ jobs:
       - name: Build frontend
         run: npm run build
 
-      # Remove old dist folder first to avoid nested dist/dist
+      # Safely remove old dist folder (won't fail if missing)
       - name: Clean old dist on server
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -33,7 +33,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            rm -rf /var/www/majesticmarriages/majesticmarriages_frontend/dist
+            [ -d /var/www/majesticmarriages/majesticmarriages_frontend/dist ] && rm -rf /var/www/majesticmarriages/majesticmarriages_frontend/dist || true
 
       # Upload fresh dist folder
       - name: Upload new dist to VPS
