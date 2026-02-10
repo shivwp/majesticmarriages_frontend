@@ -109,7 +109,7 @@ export function Home() {
             </motion.div>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl mb-6 leading-tight" style={{ fontFamily: 'var(--font-serif)' }}>
-              We Plan Your Dream{" "}
+              We Plan Your Dreams{" "}
               <span className="text-[var(--gold)]">Wedding</span> & Events
             </h1>
 
