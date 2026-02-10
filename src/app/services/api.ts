@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 const BASE_URL = import.meta.env.VITE_API_URL ||
-  (import.meta.env.PROD ? 'https://api.majesticmarriages.com' : 'http://localhost:5000');
+  (import.meta.env.PROD ? 'https://majesticmarriages.com' : 'http://127.0.0.1:5000');
 
 const API_URL = BASE_URL.endsWith('/api') ? BASE_URL : `${BASE_URL.replace(/\/$/, '')}/api`;
 
