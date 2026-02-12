@@ -15,11 +15,11 @@ export function StickyActions() {
   }, []);
 
   const handleWhatsApp = () => {
-    window.open("https://wa.me/919849051540?text=Hello! I'm interested in your event planning services.", "_blank");
+    window.open("https://wa.me/918949051540?text=Hello! I'm interested in your event planning services.", "_blank");
   };
 
   const handleCall = () => {
-    window.location.href = "tel:+919849051540";
+    window.location.href = "tel:+918949051540";
   };
 
   const scrollToTop = () => {
@@ -54,7 +54,7 @@ export function StickyActions() {
       >
         <MessageCircle size={24} />
       </motion.button>
-      
+
       <motion.button
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}

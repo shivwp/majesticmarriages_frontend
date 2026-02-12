@@ -20,7 +20,7 @@ export function Button({
   type = "button",
   disabled = false
 }: ButtonProps) {
-  const baseStyles = "rounded-full transition-all inline-flex items-center justify-center";
+  const baseStyles = "rounded-full transition-all inline-flex items-center justify-center cursor-pointer";
 
   const variants = {
     primary: "bg-gradient-to-r from-[var(--maroon)] to-[var(--royal-blue)] text-white hover:shadow-lg",

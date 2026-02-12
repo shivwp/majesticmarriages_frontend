@@ -56,6 +56,10 @@ export function Booking() {
     "500+"
   ];
 
+  const cities = [
+    "Jaipur"
+  ];
+
   const handleInputChange = (field: string, value: string) => {
     setFormData({ ...formData, [field]: value });
   };
@@ -104,7 +108,7 @@ export function Booking() {
     const message = encodeURIComponent(
       `Hi! I'd like to inquire about event planning.\n\nEvent Type: ${formData.eventType}\nDate: ${formData.eventDate}\nLocation: ${formData.location}\nGuests: ${formData.guestCount}\nBudget: ${formData.budgetRange}\n\nName: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\n\nMessage: ${formData.message}`
     );
-    window.open(`https://wa.me/919876543210?text=${message}`, "_blank");
+    window.open(`https://wa.me/918949051540?text=${message}`, "_blank");
   };
 
   if (isSubmitted) {
@@ -156,7 +160,7 @@ export function Booking() {
                 <MessageCircle size={20} className="mr-2" />
                 WhatsApp Us
               </Button>
-              <Button variant="outline" onClick={() => window.location.href = "tel:+919876543210"}>
+              <Button variant="outline" onClick={() => window.location.href = "tel:+918949051540"}>
                 <Phone size={20} className="mr-2" />
                 Call Us
               </Button>
@@ -237,7 +241,7 @@ export function Booking() {
                       <button
                         key={type}
                         onClick={() => handleInputChange("eventType", type)}
-                        className={`p-4 rounded-xl border-2 transition-all ${formData.eventType === type
+                        className={`p-4 rounded-xl border-2 transition-all cursor-pointer ${formData.eventType === type
                           ? "border-[var(--maroon)] bg-[var(--maroon)]/5 text-[var(--maroon)]"
                           : "border-gray-200 hover:border-[var(--maroon)]/50"
                           }`}
@@ -266,14 +270,19 @@ export function Booking() {
                   <label className="block mb-2 text-[var(--maroon)]" style={{ fontFamily: 'var(--font-serif)' }}>
                     Event Location / City
                   </label>
-                  <input
-                    type="text"
+                  <select
                     value={formData.location}
                     onChange={(e) => handleInputChange("location", e.target.value)}
-                    placeholder="e.g., Mumbai, Bangalore"
-                    className="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-[var(--maroon)] focus:outline-none"
+                    className="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-[var(--maroon)] focus:outline-none bg-white appearance-none cursor-pointer"
                     style={{ fontFamily: 'var(--font-sans)' }}
-                  />
+                  >
+                    <option value="">Select City</option>
+                    {cities.map((city) => (
+                      <option key={city} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
             </div>
@@ -299,7 +308,7 @@ export function Booking() {
                       <button
                         key={range}
                         onClick={() => handleInputChange("guestCount", range)}
-                        className={`p-4 rounded-xl border-2 transition-all ${formData.guestCount === range
+                        className={`p-4 rounded-xl border-2 transition-all cursor-pointer ${formData.guestCount === range
                           ? "border-[var(--maroon)] bg-[var(--maroon)]/5 text-[var(--maroon)]"
                           : "border-gray-200 hover:border-[var(--maroon)]/50"
                           }`}
@@ -320,7 +329,7 @@ export function Booking() {
                       <button
                         key={range}
                         onClick={() => handleInputChange("budgetRange", range)}
-                        className={`w-full p-4 rounded-xl border-2 transition-all text-left ${formData.budgetRange === range
+                        className={`w-full p-4 rounded-xl border-2 transition-all text-left cursor-pointer ${formData.budgetRange === range
                           ? "border-[var(--maroon)] bg-[var(--maroon)]/5 text-[var(--maroon)]"
                           : "border-gray-200 hover:border-[var(--maroon)]/50"
                           }`}

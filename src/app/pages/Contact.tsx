@@ -36,7 +36,7 @@ export function Contact() {
   };
 
   const handleWhatsApp = () => {
-    window.open("https://wa.me/919849051540?text=Hello! I'd like to inquire about your event planning services.", "_blank");
+    window.open("https://wa.me/918949051540?text=Hello! I'd like to inquire about your event planning services.", "_blank");
   };
 
   const contactInfo = [
@@ -44,7 +44,7 @@ export function Contact() {
       icon: Phone,
       title: "Phone",
       details: ["+91 89490 51540"],
-      action: "tel:+919849051540"
+      action: "tel:+918949051540"
     },
     {
       icon: Mail,
@@ -308,7 +308,7 @@ export function Contact() {
                     <span>Chat on WhatsApp</span>
                   </button>
                   <a
-                    href="tel:+919849051540"
+                    href="tel:+918949051540"
                     className="w-full bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white p-4 rounded-xl flex items-center justify-center gap-3 transition-colors"
                     style={{ fontFamily: 'var(--font-sans)' }}
                   >
